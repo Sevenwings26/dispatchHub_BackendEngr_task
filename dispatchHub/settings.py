@@ -38,10 +38,11 @@ else:
 
 
 if ENVIRONMENT == "development":
-    ALLOWED_HOSTS = ["*"]
+    ALLOWED_HOSTS = ["*", "dispatchhub-task.onrender.com"]
 else:
     ALLOWED_HOSTS = [
         os.getenv("RENDER_HOST_URL"),
+        "dispatchhub-task.onrender.com",
     ]
 
 # Application definition
