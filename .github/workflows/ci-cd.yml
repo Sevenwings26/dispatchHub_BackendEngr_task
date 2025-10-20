@@ -1,4 +1,4 @@
-name: Deploy Start Films
+name: Deploy Django REST API
 
 on:
   push:
@@ -28,27 +28,63 @@ jobs:
         run: |
           python manage.py test
 
-    #   # ---------- Option 1: Render Deploy ----------
-    #   - name: 🚀 Deploy to Render
-    #     if: success()
-    #     uses: johnbeynon/render-deploy-action@v0.0.8
-    #     with:
-    #       service-id: ${{ secrets.RENDER_SERVICE_ID }}
-    #       api-key: ${{ secrets.RENDER_API_KEY }}
 
-      # ---------- Option 2: SSH Deploy to VPS ----------
-      # - name: 🚀 Deploy to VPS
-      #   if: success()
-      #   uses: appleboy/ssh-action@v0.1.10
-      #   with:
-      #     host: ${{ secrets.VPS_HOST }}
-      #     username: ${{ secrets.VPS_USER }}
-      #     key: ${{ secrets.VPS_SSH_KEY }}
-      #     script: |
-      #       cd /path/to/your/project
-      #       git pull origin main
-      #       source venv/bin/activate
-      #       pip install -r requirements.txt
-      #       python manage.py migrate
-      #       python manage.py collectstatic --noinput
-      #       sudo systemctl restart gunicorn
+      # TEST CONNECTION TO RENDER API
+      - name: 🔍 Verify Render API Connection
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+        run: |
+          echo "Checking Render API authentication..."
+          curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            https://api.render.com/v1/services \
+            | grep -q "200" && echo "✅ Connected to Render API" || (echo "❌ Failed to connect" && exit 1)
+
+      # DEPLOY TO RENDER
+      - name: 🚀 Deploy to Render
+        if: success()
+        uses: johnbeynon/render-deploy-action@v0.0.8
+        with:
+          service-id: ${{ secrets.RENDER_SERVICE_ID }}
+          api-key: ${{ secrets.RENDER_API_KEY }}
+
+
+
+# name: Deploy Start Films
+
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: 🧱 Checkout Repository
+#         uses: actions/checkout@v4
+
+#       - name: 🐍 Set up Python
+#         uses: actions/setup-python@v5
+#         with:
+#           python-version: "3.11"
+
+#       - name: 📦 Install Dependencies
+#         run: |
+#           python -m pip install --upgrade pip
+#           pip install -r requirements.txt
+
+#       - name: ✅ Run Tests
+#         run: |
+#           python manage.py test
+
+#       # ---------- Render Deploy Deployment ----------
+#       - name: 🚀 Deploy to Render
+#         if: success()
+#         uses: johnbeynon/render-deploy-action@v0.0.8
+#         with:
+#           service-id: ${{ secrets.RENDER_SERVICE_ID }}
+#           api-key: ${{ secrets.RENDER_API_KEY }}
+

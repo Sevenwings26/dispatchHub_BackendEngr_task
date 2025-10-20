@@ -22,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
-# ENVIRONMENT = "production"
+ENVIRONMENT = "production"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -37,9 +37,12 @@ else:
     DEBUG = False
 
 
-# RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-
-ALLOWED_HOSTS = ["*"]
+if ENVIRONMENT == "development":
+    ALLOWED_HOSTS = ["*"]
+else:
+    ALLOWED_HOSTS = [
+        os.getenv("RENDER_HOST_URL"),
+    ]
 
 # Application definition
 
