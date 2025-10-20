@@ -1,0 +1,1 @@
+web: gunicorn dispatchHub.wsgi --log-file -
