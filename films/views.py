@@ -14,6 +14,17 @@ from .serializers import FilmSerializer, CommentSerializer
 # def home()
 
 
+@extend_schema(
+        tags=["System"],
+        summary="Health Check", 
+        description="Basic liveness probe", 
+        responses={200:dict}
+)
+@api_view(['GET'])
+def health_check(request):
+    return Response({'Status':"Ok"}, status=status.HTTP_200_OK)
+
+
 def fetch_films_from_swapi():
     """Helper function to fetch films from SWAPI and save to database"""
     try:

@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns = [
     # Film endpoints
+    path('healthz/', views.health_check, name='health-check'),
     path('', views.film_list, name='film-list'),
     path('films/<int:film_id>/comments/', views.film_comments, name='film-comments'),
     path('films/<int:film_id>/comments/add/', views.add_comment, name='add-comment'),

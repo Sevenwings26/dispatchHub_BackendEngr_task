@@ -15,7 +15,8 @@ A Django REST API for managing Star Wars films and comments, with data automatic
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `GET` | `/films/` | Get all films with comment counts, sorted by release date |
+| `GET` | `/healthz/` | RESTAPI Health Check |
+| `GET` | `/` | Get all films with comment counts, sorted by release date |
 | `GET` | `/films/{id}/comments/` | Get all comments for a specific film |
 | `POST` | `/films/{id}/comments/add/` | Add a comment to a specific film |
 
@@ -27,7 +28,7 @@ A Django REST API for managing Star Wars films and comments, with data automatic
 
 ### 1. Clone the Repository
 ```bash
-git clone <>
+git clone https://github.com/Sevenwings26/dispatchHub_BackendEngr_task.git
 cd dispatchHub
 ```
 
