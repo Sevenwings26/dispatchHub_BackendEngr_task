@@ -37,15 +37,16 @@ else:
     DEBUG = True
 
 
-if ENVIRONMENT == "development":
-    ALLOWED_HOSTS = ["*"]
-else:
-    ALLOWED_HOSTS = [
-        os.getenv("RENDER_HOST_URL"),
-        "localhost",
-        "127.0.0.1",
-    ]
-# Application definition
+ALLOWED_HOSTS = ["*"]
+# if ENVIRONMENT == "development":
+#     ALLOWED_HOSTS = ["*"]
+# else:
+#     ALLOWED_HOSTS = [
+#         os.getenv("RENDER_HOST_URL"),
+#         "localhost",
+#         "127.0.0.1",
+#     ]
+# # Application definition
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -102,19 +103,12 @@ ROOT_URLCONF = "dispatchHub.urls"
 #     os.getenv("RENDER_HOST_URL"),
 # ]
 
-
-import os
-
-# Example: "https://dispatchhub-task.onrender.com,https://api.example.com"
-raw_cors = os.getenv("CORS_ALLOWED_ORIGINS", "")
-
-if raw_cors:
-    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in raw_cors.split(",")]
-else:
-    CORS_ALLOWED_ORIGINS = [
-        "http://localhost:3000",
-        "http://127.0.0.1:8000",
-    ]
+# CORS settings
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "https://dispatchhub-task.onrender.com",
+]
 
 
 
