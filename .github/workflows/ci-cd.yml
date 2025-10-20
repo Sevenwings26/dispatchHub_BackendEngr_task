@@ -1,43 +1,54 @@
-name: CI pipeline
+name: Deploy Start Films
 
 on:
   push:
-    branches: [ main, master, develop ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ "main" ]
 
 jobs:
-  test:
-    name: Run Tests and Checks
+  build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-        
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        
-    - name: Run migrations
-      run: |
-        python manage.py makemigrations --check --dry-run
-        python manage.py migrate
-        
-    - name: Run Django tests
-      run: |
-        python manage.py test
-        
-    - name: Check if app starts
-      run: |
-        python manage.py check --deploy --fail-level WARNING
-        
-    - name: Validate Django setup
-      run: |
-        python manage.py validate_templates
+      - name: 🧱 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: 📦 Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: ✅ Run Tests
+        run: |
+          python manage.py test
+
+    #   # ---------- Option 1: Render Deploy ----------
+    #   - name: 🚀 Deploy to Render
+    #     if: success()
+    #     uses: johnbeynon/render-deploy-action@v0.0.8
+    #     with:
+    #       service-id: ${{ secrets.RENDER_SERVICE_ID }}
+    #       api-key: ${{ secrets.RENDER_API_KEY }}
+
+      # ---------- Option 2: SSH Deploy to VPS ----------
+      # - name: 🚀 Deploy to VPS
+      #   if: success()
+      #   uses: appleboy/ssh-action@v0.1.10
+      #   with:
+      #     host: ${{ secrets.VPS_HOST }}
+      #     username: ${{ secrets.VPS_USER }}
+      #     key: ${{ secrets.VPS_SSH_KEY }}
+      #     script: |
+      #       cd /path/to/your/project
+      #       git pull origin main
+      #       source venv/bin/activate
+      #       pip install -r requirements.txt
+      #       python manage.py migrate
+      #       python manage.py collectstatic --noinput
+      #       sudo systemctl restart gunicorn

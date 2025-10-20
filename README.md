@@ -145,8 +145,7 @@ dispatchHub/
 ├── .github/workflows/    # CI/CD configuration
 │   └── deploy.yml        # GitHub Actions workflow
 ├── requirements.txt      # Python dependencies
-├── Procfile             # Heroku process file
-└── render.yaml          # Render.com configuration
+
 ```
 
 ## 🔧 Configuration

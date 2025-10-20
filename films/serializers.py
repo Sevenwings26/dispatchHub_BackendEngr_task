@@ -1,4 +1,5 @@
-from rest_framework import serializers 
+from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
 from .models import Film, Comment
 
 class CommentSerializer(serializers.ModelSerializer): 
@@ -12,7 +13,6 @@ class CommentSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Comment cannot exceed 500 characters.")
         return value
 
-
 class FilmSerializer(serializers.ModelSerializer):
     comment_count = serializers.SerializerMethodField()
 
@@ -20,7 +20,6 @@ class FilmSerializer(serializers.ModelSerializer):
         model = Film
         fields = ['id', 'title', 'release_date', 'comment_count']
 
+    @extend_schema_field(serializers.IntegerField)
     def get_comment_count(self, obj):
         return obj.comments.count()
-    
-    
