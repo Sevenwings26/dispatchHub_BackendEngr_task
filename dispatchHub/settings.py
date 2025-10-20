@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 if ENVIRONMENT == "development":
     DEBUG = True
 else:
-    DEBUG = False
+    DEBUG = True
 
 
 if ENVIRONMENT == "development":
@@ -101,6 +101,22 @@ ROOT_URLCONF = "dispatchHub.urls"
 #     "http://localhost:8000",
 #     os.getenv("RENDER_HOST_URL"),
 # ]
+
+
+import os
+
+# Example: "https://dispatchhub-task.onrender.com,https://api.example.com"
+raw_cors = os.getenv("CORS_ALLOWED_ORIGINS", "")
+
+if raw_cors:
+    CORS_ALLOWED_ORIGINS = [origin.strip() for origin in raw_cors.split(",")]
+else:
+    CORS_ALLOWED_ORIGINS = [
+        "http://localhost:3000",
+        "http://127.0.0.1:8000",
+    ]
+
+
 
 TEMPLATES = [
     {
