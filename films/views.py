@@ -11,9 +11,6 @@ from .serializers import FilmSerializer, CommentSerializer
 
 
 
-# def home()
-
-
 @extend_schema(
         tags=["System"],
         summary="Health Check", 
@@ -23,6 +20,43 @@ from .serializers import FilmSerializer, CommentSerializer
 @api_view(['GET'])
 def health_check(request):
     return Response({'Status':"Ok"}, status=status.HTTP_200_OK)
+
+
+@extend_schema(
+    tags=["System"],
+    summary="API Index",
+    description=(
+        "Welcome to the DispatchHub Backend Task consuming StarFilms API.\n\n"
+        "This service provides RESTful endpoints for managing films and comments.\n"
+        "It also includes a health check endpoint and API documentation links.\n\n"
+        "**Available Routes:**\n"
+        "- `/healthz/` → Basic service liveness probe\n"
+        "- `/films/` → List all films\n"
+        "- `/films/<film_id>/comments/` → Retrieve comments for a specific film\n"
+        "- `/films/<film_id>/comments/add/` → Add a comment to a specific film\n"
+        "- `/api/docs/` → Interactive Swagger documentation\n"
+        "- `/api/schema/swagger-ui/` → Raw OpenAPI schema\n"
+    ),
+    responses={200: dict}
+)
+@api_view(['GET'])
+def index(request):
+    """API Root — provides information about the service and available routes."""
+    data = {
+        "project": "DispatchHub Film API",
+        "description": "A simple RESTful API for managing films and comments.",
+        "status": "Running ✅",
+        "available_paths": {
+            "health_check": "/healthz/",
+            "films": "/films/",
+            "film_comments": "/films/<film_id>/comments/",
+            "add_comment": "/films/<film_id>/comments/add/",
+            "docs": "/api/docs/",
+            "schema": "/api/schema/swagger-ui/",
+        },
+        "message": "Welcome to DispatchHub! Use the endpoints above to interact with the API."
+    }
+    return Response(data, status=status.HTTP_200_OK)
 
 
 def fetch_films_from_swapi():
@@ -48,13 +82,13 @@ def fetch_films_from_swapi():
 @extend_schema(
     summary="Get all films",
     description="""Retrieve a list of all Star Wars films.
-    **Features:**
+    Features:
     - Automatically fetches films from SWAPI if database is empty
     - Includes ID, title, release date, and comment count for each film
     - Films are sorted by release date in ascending order
     - Each film includes a count of associated comments
     
-    **Note:** The first time this endpoint is called, it may take longer as it populates the database from SWAPI.
+    Note: The first time this endpoint is called, it may take longer as it populates the database from SWAPI.
     """,
     responses={
         200: FilmSerializer(many=True),
@@ -118,6 +152,7 @@ def film_comments(request, film_id):
     comments = film.comments.all().order_by('created_at')
     serializer = CommentSerializer(comments, many=True)
     return Response(serializer.data)
+
 
 
 @extend_schema(

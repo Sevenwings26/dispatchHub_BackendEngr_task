@@ -57,7 +57,7 @@ INSTALLED_APPS = [
     "films",
 
     # installed libraries
-    # 'corsheaders',
+    'corsheaders',
     'rest_framework',
 
     # docs library
@@ -70,15 +70,19 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
+# settings.py
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Star Wars Films API',
+    'TITLE': 'DispatchHub Backend Task (Star Film API)',
     'DESCRIPTION': 'A REST API for managing Star Wars films and comments',
     'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False,
-    # OTHER SETTINGS
+    'SERVERS': [
+        {'url': 'http://127.0.0.1:8000', 'description': 'Local server'},
+    ],
 }
 
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     'whitenoise.middleware.WhiteNoiseMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -90,6 +94,12 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "dispatchHub.urls"
+
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:8000",
+    "http://localhost:8000",
+    os.getenv("RENDER_HOST_URL"),
+]
 
 TEMPLATES = [
     {

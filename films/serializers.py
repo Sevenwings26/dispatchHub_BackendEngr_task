@@ -23,3 +23,4 @@ class FilmSerializer(serializers.ModelSerializer):
     @extend_schema_field(serializers.IntegerField)
     def get_comment_count(self, obj):
         return obj.comments.count()
+    

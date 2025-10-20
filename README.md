@@ -143,7 +143,7 @@ dispatchHub/
 │   ├── urls.py          # Project URL routes
 │   └── wsgi.py          # WSGI configuration
 ├── .github/workflows/    # CI/CD configuration
-│   └── deploy.yml        # GitHub Actions workflow
+│   └── ci-cd.yml        # GitHub Actions workflow
 ├── requirements.txt      # Python dependencies
 
 ```
