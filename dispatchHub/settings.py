@@ -34,17 +34,17 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 if ENVIRONMENT == "development":
     DEBUG = True
 else:
-    DEBUG = True
+    DEBUG = False
 
 
 if ENVIRONMENT == "development":
-    ALLOWED_HOSTS = ["*", "dispatchhub-task.onrender.com"]
+    ALLOWED_HOSTS = ["*"]
 else:
     ALLOWED_HOSTS = [
         os.getenv("RENDER_HOST_URL"),
-        "dispatchhub-task.onrender.com",
+        "localhost",
+        "127.0.0.1",
     ]
-
 # Application definition
 
 INSTALLED_APPS = [
