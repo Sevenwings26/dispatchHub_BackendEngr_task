@@ -1,14 +1,12 @@
-import requests
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.exceptions import APIException
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample, OpenApiResponse
 from drf_spectacular.types import OpenApiTypes
 from .models import Film
 from .serializers import FilmSerializer, CommentSerializer
-
+from .utils import fetch_films_from_swapi
 
 
 @extend_schema(
@@ -26,16 +24,7 @@ def health_check(request):
     tags=["System"],
     summary="API Index",
     description=(
-        "Welcome to the DispatchHub Backend Task consuming StarFilms API.\n\n"
-        "This service provides RESTful endpoints for managing films and comments.\n"
-        "It also includes a health check endpoint and API documentation links.\n\n"
-        "**Available Routes:**\n"
-        "- `/healthz/` → Basic service liveness probe\n"
-        "- `/films/` → List all films\n"
-        "- `/films/<film_id>/comments/` → Retrieve comments for a specific film\n"
-        "- `/films/<film_id>/comments/add/` → Add a comment to a specific film\n"
-        "- `/api/docs/` → Interactive Swagger documentation\n"
-        "- `/api/schema/swagger-ui/` → Raw OpenAPI schema\n"
+        "Welcome to the DispatchHub Backend Task consuming StarFilms API."
     ),
     responses={200: dict}
 )
@@ -43,7 +32,7 @@ def health_check(request):
 def index(request):
     """API Root — provides information about the service and available routes."""
     data = {
-        "project": "DispatchHub Film API",
+        "project": "DispatchHub Backend Task...",
         "description": "A simple RESTful API for managing films and comments.",
         "status": "Running ✅",
         "available_paths": {
@@ -57,26 +46,6 @@ def index(request):
         "message": "Welcome to DispatchHub! Use the endpoints above to interact with the API."
     }
     return Response(data, status=status.HTTP_200_OK)
-
-
-def fetch_films_from_swapi():
-    """Helper function to fetch films from SWAPI and save to database"""
-    try:
-        response = requests.get('https://swapi.dev/api/films/')
-        response.raise_for_status()
-        films_data = response.json()['results']
-        
-        for film_data in films_data:
-            Film.objects.get_or_create(
-                swapi_id=film_data['episode_id'],
-                defaults={
-                    'title': film_data['title'],
-                    'release_date': film_data['release_date']
-                }
-            )
-        return True
-    except requests.RequestException as e:
-        raise APIException(detail=f"Failed to fetch films from SWAPI: {str(e)}")
 
 
 @extend_schema(
@@ -222,3 +191,4 @@ def add_comment(request, film_id):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
