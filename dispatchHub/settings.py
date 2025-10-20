@@ -34,7 +34,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 if ENVIRONMENT == "development":
     DEBUG = True
 else:
-    DEBUG = False
+    DEBUG = True
 
 
 if ENVIRONMENT == "development":
