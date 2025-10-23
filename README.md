@@ -1,5 +1,4 @@
 # Star Wars Films API
-
 A Django REST API for managing Star Wars films and comments, with data automatically fetched from SWAPI (Star Wars API). This project includes automated deployment to cloud platforms.
 
 ## 🚀 Features
@@ -177,9 +176,6 @@ Interactive API documentation is available at:
 ## 🧪 Testing
 
 ```bash
-# Run tests
-python manage.py test
-
 # Run with coverage
 coverage run manage.py test
 coverage report
@@ -214,7 +210,6 @@ Films are automatically populated from [SWAPI](https://swapi.dev/) (Star Wars AP
 
 ### Logs
 
-- **Heroku**: `heroku logs --tail`
 - **Render**: Check dashboard logs
 - **Local**: Check console output or Django debug page
 
@@ -236,3 +231,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - [Django REST Framework](https://www.django-rest-framework.org/) for the API framework
 - [drf-spectacular](https://drf-spectacula  r.readthedocs.io/) for API documentation
 - [Heroku](https://www.heroku.com/) and [Render](https://render.com/) for deployment platforms
+

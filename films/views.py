@@ -80,7 +80,7 @@ def film_list(request):
     """
     # Fetch from SWAPI if no films in database
     if not Film.objects.exists():
-        fetch_films_from_swapi()
+        fetch_films_from_swapi() # helper function to fetch and save films
     
     films = Film.objects.all().order_by('release_date')
     serializer = FilmSerializer(films, many=True)

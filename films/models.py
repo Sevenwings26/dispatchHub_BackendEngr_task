@@ -13,7 +13,6 @@ class Film(models.Model):
         return self.title
 
 
-
 class Comment(models.Model): 
     film = models.ForeignKey(Film, on_delete=models.CASCADE, related_name='comments') 
     text = models.CharField(max_length=500) 
